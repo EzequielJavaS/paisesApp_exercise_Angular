@@ -1,4 +1,6 @@
 import { Component} from '@angular/core';
+import { PaisService } from '../../services/pais.service';
+import { Country } from '../../interfaces/pais.interface';
 
 @Component({
   selector: 'app-por-pais',
@@ -7,14 +9,23 @@ import { Component} from '@angular/core';
   ]
 })
 export class PorPaisComponent {
-  termino: string= 'Canadá';
+  termino: string= '';
+  hayError: boolean = false;
+  paises: Country[] = [];
 
-  constructor() { }
+  constructor( private paisService: PaisService ) { }
 
   buscar() {
+    this.hayError = false;
     console.log(this.termino);
+    this.paisService.buscarPais( this.termino )
+      .subscribe(resp => {   
+        console.log(resp);
+        this.paises = resp;
+        console.log(resp);
+      }, (err) => {
+        this.hayError = true;
+        this.paises = [];
+      });
   }
-
-  
-
 }
